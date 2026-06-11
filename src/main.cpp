@@ -4,6 +4,7 @@
 
 #include <Arduino.h>
 #include <WiFi.h>
+#include <SPIFFS.h>
 
 #include "config.h"
 #include "hardware/display.h"
@@ -67,6 +68,10 @@ void setup() {
   delay(500);
   Serial.println();
   Serial.println("Plane Radar");
+
+  if (!SPIFFS.begin(true)) {
+    Serial.println("SPIFFS mount failed");
+  }
 
   bootButtonInit();
   displayInit();
