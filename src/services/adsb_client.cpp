@@ -276,6 +276,16 @@ bool fetchUpdate(double center_lat, double center_lon, float fetch_radius_km) {
 
   s_aircraft_count = n;
   Serial.printf("adsb: %u aircraft\n", static_cast<unsigned>(n));
+  if (n > 0) {
+    Serial.print("adsb: callsigns: ");
+    for (size_t i = 0; i < n; ++i) {
+      Serial.print(s_aircraft[i].callsign);
+      if (i + 1 < n) {
+        Serial.print(", ");
+      }
+    }
+    Serial.println();
+  }
   return true;
 }
 
