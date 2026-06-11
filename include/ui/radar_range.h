@@ -51,7 +51,7 @@ void saveRunwaysFromPortal(const char* checkbox_value);
 void formatRing3Label(char* buf, size_t len, float ring3_km,
                       bool use_nautical_miles);
 void formatCurrentRing3Label(char* buf, size_t len);
-/** Reset distance units to km (e.g. with WiFi credential wipe). */
+/** Reset distance units to nm (e.g. with WiFi credential wipe). */
 void unitsReset();
 
 }  // namespace ui::radar
