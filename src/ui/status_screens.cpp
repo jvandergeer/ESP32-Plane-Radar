@@ -1,6 +1,7 @@
 #include "ui/status_screens.h"
 
 #include <lgfx/v1/lgfx_fonts.hpp>
+#include "ui/logo.h"
 
 #include <cmath>
 #include <cstdio>
@@ -240,4 +241,18 @@ void statusScreenWifiReset() {
   };
   drawTextBlock(config::kColorYellow, config::kTextOnYellow, lines,
                 sizeof(lines) / sizeof(lines[0]));
+}
+
+void statusScreenSplash() {
+  tft.fillScreen(config::kColorBlack);
+
+  // Display the logo centered on the screen.
+  const int cx = kCenterX;
+  const int cy = kCenterY;
+
+  // Center the logo (120x120)
+  const int logo_x = cx - LOGO_WIDTH / 2;
+  const int logo_y = cy - LOGO_HEIGHT / 2;
+
+  tft.pushImage(logo_x, logo_y, LOGO_WIDTH, LOGO_HEIGHT, LOGO_DATA);
 }
