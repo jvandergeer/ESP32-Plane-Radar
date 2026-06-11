@@ -45,8 +45,8 @@ constexpr bool kDisplayInvert = true;
 constexpr bool kDisplayRgbOrder = false;
 
 // --- Radar center defaults (overridden via WiFi setup portal) ---
-constexpr double kDefaultRadarLat = 52.3676;
-constexpr double kDefaultRadarLon = 4.9041;
+constexpr double kDefaultRadarLat = 52.2447; // EHTE
+constexpr double kDefaultRadarLon = 6.0467; // EHTE
 
 /** Poll adsb.fi (API public limit: 1 req/s). */
 const unsigned long kAdsbFetchIntervalMs = 1500;

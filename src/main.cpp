@@ -71,7 +71,7 @@ void setup() {
   bootButtonInit();
   displayInit();
   statusScreenSplash();
-  delay(8000);
+  delay(5000);
   if (wifiShowsSetupScreenOnBoot()) {
     statusScreenPortal();
   }
