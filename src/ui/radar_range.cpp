@@ -121,7 +121,7 @@ void formatCurrentRing3Label(char* buf, size_t len) {
 }
 
 void unitsReset() {
-  s_use_nautical_miles = false;
+  s_use_nautical_miles = true;
   s_show_runways = true;
   if (s_prefs.begin(kPrefsNamespace, false)) {
     s_prefs.remove(kPrefsNauticalMilesKey);
