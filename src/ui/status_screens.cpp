@@ -1,7 +1,6 @@
 #include "ui/status_screens.h"
 
 #include <lgfx/v1/lgfx_fonts.hpp>
-#include "ui/logo.h"
 
 #include <cmath>
 #include <cstdio>
@@ -11,6 +10,11 @@
 #include "config.h"
 #include "hardware/display.h"
 #include "hardware/display_font.h"
+
+extern "C" {
+extern const uint8_t _binary_data_logo_png_start[] asm("_binary_data_logo_png_start");
+extern const uint8_t _binary_data_logo_png_end[] asm("_binary_data_logo_png_end");
+}
 
 namespace fonts = lgfx::v1::fonts;
 
@@ -246,10 +250,19 @@ void statusScreenWifiReset() {
 void statusScreenSplash() {
   tft.fillScreen(config::kColorBlack);
 
-  // Display the logo bitmap (120x120 RGB565)
-  const int logo_x = kCenterX - LOGO_WIDTH / 2;
-  const int logo_y = kCenterY - LOGO_HEIGHT / 2;
+  const uint8_t* logo_data = _binary_data_logo_png_start;
+  const size_t logo_len =
+      static_cast<size_t>(_binary_data_logo_png_end - _binary_data_logo_png_start);
 
-  tft.pushImage(logo_x, logo_y, LOGO_WIDTH, LOGO_HEIGHT, LOGO_DATA);
-  Serial.println("splash: logo displayed");
+  if (logo_len == 0) {
+    Serial.println("splash: embedded logo.png missing");
+    return;
+  }
+
+  // Draw PNG centered. Adjust x/y if the PNG is not 240x240.
+  const bool ok = tft.drawPng(logo_data, logo_len, 0, 0);
+
+  Serial.printf("splash: logo PNG %s (%u bytes)\n",
+                ok ? "displayed" : "failed",
+                static_cast<unsigned>(logo_len));
 }
