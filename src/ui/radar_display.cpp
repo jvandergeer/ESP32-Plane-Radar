@@ -200,13 +200,20 @@ void initPalette() {
 }
 
 constexpr float kKmPerDeg = 111.0f;
+constexpr float kDegToRad = 0.01745329252f;
 
 void offsetKmFromCenter(float lat, float lon, float* dx_km, float* dy_km,
                         float* dist_km) {
+  const float center_lat_rad =
+      static_cast<float>(services::location::lat()) * kDegToRad;
+
+  const float km_per_lon_deg = kKmPerDeg * cosf(center_lat_rad);
+
   *dx_km =
-      static_cast<float>(lon - services::location::lon()) * kKmPerDeg;
+      static_cast<float>(lon - services::location::lon()) * km_per_lon_deg;
   *dy_km =
       static_cast<float>(lat - services::location::lat()) * kKmPerDeg;
+
   *dist_km = sqrtf((*dx_km) * (*dx_km) + (*dy_km) * (*dy_km));
 }
 

@@ -196,6 +196,9 @@ void resetWifiCredentials() {
 
 void onConfigPortalApStarted(WiFiManager*) {
   statusScreenPortal();
+  delay(2000);  // Show portal screen briefly
+  statusScreenSplash();
+  delay(3000);  // Show splash in AP mode
 #ifdef WM_MDNS
   if (MDNS.begin(config::kPortalHostname)) {
     MDNS.addService("http", "tcp", 80);
@@ -292,6 +295,9 @@ bool tryConnectWithUi(const String& ssid, const String& pass, bool show_ui) {
   const char* ui_ssid = ssid.length() > 0 ? ssid.c_str() : "network";
   if (show_ui) {
     statusScreenConnectingBegin(ui_ssid);
+    delay(1500);  // Show connecting message briefly
+    statusScreenSplash();
+    delay(1500);  // Show splash briefly
   }
 
   for (uint8_t attempt = 1; attempt <= config::kWifiConnectAttempts; ++attempt) {

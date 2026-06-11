@@ -1,6 +1,7 @@
 #include "ui/status_screens.h"
 
 #include <lgfx/v1/lgfx_fonts.hpp>
+#include "ui/logo.h"
 
 #include <cmath>
 #include <cstdio>
@@ -245,11 +246,10 @@ void statusScreenWifiReset() {
 void statusScreenSplash() {
   tft.fillScreen(config::kColorBlack);
 
-  // Load and display the PNG logo from embedded data at full color.
-  // The PNG file is embedded in the firmware and accessible via the virtual filesystem.
-  // Position it centered on the 240×240 display (assuming logo ~120×120).
-  const int logo_x = kCenterX - 60;  // Approximate center for ~120px wide image
-  const int logo_y = kCenterY - 60;  // Approximate center for ~120px tall image
+  // Display the logo bitmap (120x120 RGB565)
+  const int logo_x = kCenterX - LOGO_WIDTH / 2;
+  const int logo_y = kCenterY - LOGO_HEIGHT / 2;
 
-  tft.drawPngFile("/logo.png", logo_x, logo_y);
+  tft.pushImage(logo_x, logo_y, LOGO_WIDTH, LOGO_HEIGHT, LOGO_DATA);
+  Serial.println("splash: logo displayed");
 }
