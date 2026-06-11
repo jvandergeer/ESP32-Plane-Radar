@@ -91,9 +91,9 @@ void refreshPortalParamDefaults() {
   snprintf(lon_buf, sizeof(lon_buf), "%.6f", services::location::lon());
   s_param_lat.setValue(lat_buf, kCoordParamLen);
   s_param_lon.setValue(lon_buf, kCoordParamLen);
-snprintf(s_nm_checkbox_attrs, sizeof(s_nm_checkbox_attrs), "type=\"checkbox\"%s",
-         ui::radar::useNauticalMiles() ? " checked" : "");
-s_param_nm.setValue("T", 2);
+  snprintf(s_nm_checkbox_attrs, sizeof(s_nm_checkbox_attrs), "type=\"checkbox\"%s",
+           ui::radar::useNauticalMiles() ? " checked" : "");
+  s_param_nm.setValue("T", 2);
   snprintf(s_runways_checkbox_attrs, sizeof(s_runways_checkbox_attrs),
            "type=\"checkbox\"%s", ui::radar::showRunways() ? " checked" : "");
   s_param_runways.setValue("T", 2);
@@ -104,7 +104,7 @@ void onPortalParamsSaved() {
                                            s_param_lon.getValue())) {
     Serial.println("Invalid lat/lon in portal — keeping previous location");
   }
-ui::radar::saveNauticalMilesFromPortal(s_param_nm.getValue());
+  ui::radar::saveNauticalMilesFromPortal(s_param_nm.getValue());
   ui::radar::saveRunwaysFromPortal(s_param_runways.getValue());
 }
 
