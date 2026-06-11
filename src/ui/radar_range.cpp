@@ -13,14 +13,14 @@ namespace {
 
 constexpr char kPrefsNamespace[] = "planeradar";
 constexpr char kPrefsRangeKey[] = "rangeIdx";
-constexpr char kPrefsMilesKey[] = "useMiles";
+constexpr char kPrefsNauticalMilesKey[] = "useNm";
 constexpr char kPrefsRunwaysKey[] = "showRwys";
 constexpr uint8_t kDefaultRangeIndex = 1;  // 10 km ring
-constexpr float kKmPerMile = 1.609344f;
+constexpr float kKmPerNm = 1.852f;
 
 Preferences s_prefs;
 uint8_t s_range_index = kDefaultRangeIndex;
-bool s_use_miles = false;
+bool s_use_nautical_miles = true;
 bool s_show_runways = true;
 
 void saveRangeIndex() {
@@ -31,11 +31,11 @@ void saveRangeIndex() {
   s_prefs.end();
 }
 
-void saveUseMiles() {
+void saveUseNauticalMiles() {
   if (!s_prefs.begin(kPrefsNamespace, false)) {
     return;
   }
-  s_prefs.putBool(kPrefsMilesKey, s_use_miles);
+  s_prefs.putBool(kPrefsNauticalMilesKey, s_use_nautical_miles);
   s_prefs.end();
 }
 
@@ -68,7 +68,7 @@ void rangeInit() {
   const uint8_t saved = s_prefs.getUChar(kPrefsRangeKey, kDefaultRangeIndex);
   s_range_index =
       (saved < kRangePresetCount) ? saved : kDefaultRangeIndex;
-  s_use_miles = s_prefs.getBool(kPrefsMilesKey, false);
+  s_use_nautical_miles = s_prefs.getBool(kPrefsNauticalMilesKey, true);
   s_show_runways = s_prefs.getBool(kPrefsRunwaysKey, true);
   s_prefs.end();
 }
@@ -89,14 +89,14 @@ float fetchRadiusKm() {
   return outer_km * (screen_r_px / static_cast<float>(kGridOuterRadius));
 }
 
-bool useMiles() { return s_use_miles; }
+bool useNauticalMiles() { return s_use_nautical_miles; }
 
 bool showRunways() { return s_show_runways; }
 
-void saveMilesFromPortal(const char* checkbox_value) {
-  s_use_miles = portalCheckboxChecked(checkbox_value);
-  saveUseMiles();
-  Serial.printf("Distance units: %s\n", s_use_miles ? "miles" : "km");
+void saveNauticalMilesFromPortal(const char* checkbox_value) {
+  s_use_nautical_miles = portalCheckboxChecked(checkbox_value);
+  saveUseNauticalMiles();
+  Serial.printf("Distance units: %s\n", s_use_nautical_miles ? "nm" : "km");
 }
 
 void saveRunwaysFromPortal(const char* checkbox_value) {
@@ -105,10 +105,11 @@ void saveRunwaysFromPortal(const char* checkbox_value) {
   Serial.printf("Runway overlay: %s\n", s_show_runways ? "on" : "off");
 }
 
-void formatRing3Label(char* buf, size_t len, float ring3_km, bool use_miles) {
-  if (use_miles) {
-    const int mi = static_cast<int>(lroundf(ring3_km / kKmPerMile));
-    snprintf(buf, len, "%dmi", mi);
+void formatRing3Label(char* buf, size_t len, float ring3_km,
+                      bool use_nautical_miles) {
+  if (use_nautical_miles) {
+    const int nm = static_cast<int>(lroundf(ring3_km / kKmPerNm));
+    snprintf(buf, len, "%dnm", nm);
   } else {
     const int km = static_cast<int>(lroundf(ring3_km));
     snprintf(buf, len, "%dkm", km);
@@ -116,14 +117,14 @@ void formatRing3Label(char* buf, size_t len, float ring3_km, bool use_miles) {
 }
 
 void formatCurrentRing3Label(char* buf, size_t len) {
-  formatRing3Label(buf, len, rangeCurrent().ring3_km, s_use_miles);
+  formatRing3Label(buf, len, rangeCurrent().ring3_km, s_use_nautical_miles);
 }
 
 void unitsReset() {
-  s_use_miles = false;
+  s_use_nautical_miles = false;
   s_show_runways = true;
   if (s_prefs.begin(kPrefsNamespace, false)) {
-    s_prefs.remove(kPrefsMilesKey);
+    s_prefs.remove(kPrefsNauticalMilesKey);
     s_prefs.remove(kPrefsRunwaysKey);
     s_prefs.end();
   }

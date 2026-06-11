@@ -15,10 +15,10 @@ After Wi‑Fi is saved, the device reconnects automatically; the radar runs in t
 
 ## Controls (BOOT, GPIO 9, active LOW)
 
-| Action | Effect |
-|--------|--------|
-| **Short tap** | Cycle range preset (5 → 10 → 15 → 25 km); saved to flash |
-| **Hold 3 s** | Clear Wi‑Fi, location, and units; reboot into setup portal |
+| Action        | Effect                                                     |
+| ------------- | ---------------------------------------------------------- |
+| **Short tap** | Cycle range preset (5 → 10 → 15 → 25 km); saved to flash   |
+| **Hold 3 s**  | Clear Wi‑Fi, location, and units; reboot into setup portal |
 
 During setup you can also hold BOOT at power-on to force a credential reset (same as the long press).
 
@@ -39,11 +39,11 @@ The same portal runs on the setup AP and on the device’s LAN IP while connecte
 
 **Custom fields** (stored in NVS):
 
-| Field | Purpose |
-|-------|---------|
-| **Latitude / Longitude** | Radar center and ADS-B query position (defaults in `config.h` until set) |
-| **Display distances in miles** | Ring scale label in **mi** instead of **km** (e.g. `6mi` vs `10km`) |
-| **Show airport runways** | Major-airport runway overlay on the radar (off to hide) |
+| Field                          | Purpose                                                                  |
+| ------------------------------ | ------------------------------------------------------------------------ |
+| **Latitude / Longitude**       | Radar center and ADS-B query position (defaults in `config.h` until set) |
+| **Display distances in miles** | Ring scale label in **mi** instead of **km** (e.g. `6mi` vs `10km`)      |
+| **Show airport runways**       | Major-airport runway overlay on the radar (off to hide)                  |
 
 After a reset, the device reboots and shows the setup screen immediately (no “Connecting” loop on stale credentials).
 
@@ -59,14 +59,14 @@ Layout and colors: `include/ui/radar_theme.h`.
 
 ### Range presets
 
-| Ring 3 label | Outer radius (aircraft scale) |
-|------------|-------------------------------|
-| 5 km / 3 mi | ~6.7 km |
-| 10 km / 6 mi | ~13.3 km (default) |
-| 15 km / 9 mi | ~20 km |
-| 25 km / 16 mi | ~33.3 km |
+| Ring 3 label  | Outer radius (aircraft scale) |
+| ------------- | ----------------------------- |
+| 5 km / 3 nm   | ~6.7 km                       |
+| 10 km / 6 nm  | ~13.3 km (default)            |
+| 15 km / 8 nm  | ~20 km                        |
+| 25 km / 16 nm | ~33.3 km                      |
 
-Preset and miles/km choice persist across reboot (`planeradar` NVS namespace).
+Preset and nautical miles/km choice persist across reboot (`planeradar` NVS namespace).
 
 ### Runways
 
@@ -93,14 +93,14 @@ As range decreases (or aircraft approach), targets move inward; beyond-ring dots
 
 Edit **`include/config.h`** for hardware and behavior:
 
-| Area | Keys / notes |
-|------|----------------|
-| Portal | `kPortalApName`, `kPortalIp`, `kPortalHostname` / `kPortalHostUrl` (mDNS; needs `-DWM_MDNS` in `platformio.ini`) |
-| Wi‑Fi timing | connect attempts, reconnect grace, portal timeout (`0` = no timeout) |
-| BOOT | `kBootPin`, `kBootResetHoldMs`, `kBootTapMinMs` |
-| Display SPI | pins, `kDisplayInvert`, `kDisplayRgbOrder`, `kDisplaySpiWriteHz` |
-| Default location | `kDefaultRadarLat`, `kDefaultRadarLon` (until portal overrides) |
-| ADS-B | `kAdsbFetchIntervalMs`, `kAdsbShowGroundAircraft` |
+| Area             | Keys / notes                                                                                                     |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Portal           | `kPortalApName`, `kPortalIp`, `kPortalHostname` / `kPortalHostUrl` (mDNS; needs `-DWM_MDNS` in `platformio.ini`) |
+| Wi‑Fi timing     | connect attempts, reconnect grace, portal timeout (`0` = no timeout)                                             |
+| BOOT             | `kBootPin`, `kBootResetHoldMs`, `kBootTapMinMs`                                                                  |
+| Display SPI      | pins, `kDisplayInvert`, `kDisplayRgbOrder`, `kDisplaySpiWriteHz`                                                 |
+| Default location | `kDefaultRadarLat`, `kDefaultRadarLon` (until portal overrides)                                                  |
+| ADS-B            | `kAdsbFetchIntervalMs`, `kAdsbShowGroundAircraft`                                                                |
 
 Range presets: `include/ui/radar_range.h` (`kRangePresets`).
 
@@ -140,16 +140,16 @@ src/
 
 ## Wiring (GC9A01 ↔ ESP32-C3 Super Mini)
 
-| Display | ESP32-C3 |
-|---------|----------|
-| VCC | 3V3 |
-| GND | GND |
-| RST | GPIO **0** |
-| CS | GPIO **1** |
-| DC | GPIO **10** |
-| SDA (MOSI) | GPIO **3** |
-| SCL (SCLK) | GPIO **4** |
-| BOOT (user) | GPIO **9** |
+| Display     | ESP32-C3    |
+| ----------- | ----------- |
+| VCC         | 3V3         |
+| GND         | GND         |
+| RST         | GPIO **0**  |
+| CS          | GPIO **1**  |
+| DC          | GPIO **10** |
+| SDA (MOSI)  | GPIO **3**  |
+| SCL (SCLK)  | GPIO **4**  |
+| BOOT (user) | GPIO **9**  |
 
 ## Build
 
@@ -188,10 +188,10 @@ Put the board in download mode (hold **BOOT**, tap **RESET**), then flash with C
 
 ### CI and releases (GitHub Actions)
 
-| Workflow | When | Output |
-|----------|------|--------|
-| [Build](.github/workflows/build.yml) | Push / PR to `main` | Artifact `plane-radar-supermini` (merged + split `.bin` files, ~90 days) |
-| [Release](.github/workflows/release.yml) | Git tag `v*` (e.g. `v1.0.0`) | GitHub Release asset `plane-radar-v1.0.0.bin` + `.sha256` |
+| Workflow                                 | When                         | Output                                                                   |
+| ---------------------------------------- | ---------------------------- | ------------------------------------------------------------------------ |
+| [Build](.github/workflows/build.yml)     | Push / PR to `main`          | Artifact `plane-radar-supermini` (merged + split `.bin` files, ~90 days) |
+| [Release](.github/workflows/release.yml) | Git tag `v*` (e.g. `v1.0.0`) | GitHub Release asset `plane-radar-v1.0.0.bin` + `.sha256`                |
 
 To ship a version users can download:
 
